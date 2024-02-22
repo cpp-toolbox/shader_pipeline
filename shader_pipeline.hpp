@@ -7,6 +7,10 @@
  * A class that can construct an opengl shader program given
  * file paths as inputs. This acts as a wrapper to operate
  * with shader programs easily.
+ *
+ * Note that the shader programs id is a public attribute 
+ * which you can use to set uniforms.
+ *
  */
 class ShaderPipeline{
 	public:

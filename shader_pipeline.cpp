@@ -6,8 +6,14 @@
 #include <cstring>
 
 /**
- * given the shader's source code and type, register the shader with opengl
- * and return the id that opengl has given the shader
+ * precondition to all methods:
+ *  opengl has been initialized
+ */
+
+/**
+ * description
+ *  given the shader's source code and type, register the shader with opengl
+ *  and return the id that opengl has given the shader
  */
 GLuint ShaderPipeline::create_and_compile_shader_object(const char * shader_source_code, GLenum shader_type) {
 	GLuint shader_object;
@@ -28,6 +34,8 @@ GLuint ShaderPipeline::create_and_compile_shader_object(const char * shader_sour
 }
 
 /**
+ * description:
+ *  creates a shader program given a vertex and fragment shader, also uses the program
  */
 void ShaderPipeline::create_and_link_and_use_shader_program(GLuint vertex_shader_id, GLuint fragment_shader_id) {
 	this->shader_program_id = glCreateProgram();
@@ -54,6 +62,11 @@ void ShaderPipeline::create_and_link_and_use_shader_program(GLuint vertex_shader
 }
 
 
+/**
+ * description:
+ *  given a valid path with respect to the build folder for a vertex and fragment shader
+ *  it loads in the shaders and creates a shader program
+ */
 void ShaderPipeline::load_in_shaders_from_file(const char *vertex_shader_path, const char *fragment_shader_path) {
 
 	// load in shaders from file

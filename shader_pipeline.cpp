@@ -10,6 +10,10 @@
  *  opengl has been initialized
  */
 
+ShaderPipeline::ShaderPipeline(const char *vertex_shader_path, const char *fragment_shader_path) {
+    load_in_shaders_from_file(vertex_shader_path, fragment_shader_path);
+}
+
 /**
  * description
  *  given the shader's source code and type, register the shader with opengl

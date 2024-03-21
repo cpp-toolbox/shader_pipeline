@@ -7,7 +7,7 @@
 
 /**
  * precondition to all methods:
- *  opengl has been initialized
+ *  opengl has been initialized, otherwise you may get segfaults
  */
 
 ShaderPipeline::ShaderPipeline(const char *vertex_shader_path, const char *fragment_shader_path) {
@@ -94,7 +94,7 @@ void ShaderPipeline::load_in_shaders_from_file(const char *vertex_shader_path, c
 		fragment_shader_source_code = fragment_shader_string_stream.str();
 	} catch (std::ifstream::failure error) {
 		// TODO use logging here
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << strerror(errno) << std::endl;
+		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: EITHER FRAG OR VERT SHADER HAS THE ERROR " << strerror(errno) <<  std::endl;
 	}
 
 	// compile the shaders

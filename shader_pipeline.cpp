@@ -88,6 +88,9 @@ void ShaderPipeline::load_in_shaders_from_file(const char *vertex_shader_path, c
 
 		vertex_shader_source_code = vertex_shader_string_stream.str();
 		fragment_shader_source_code = fragment_shader_string_stream.str();
+        std::cout << "Successfully loaded in the vertex shader: \n" <<  vertex_shader_source_code;
+        std::cout << "Successfully loaded in the fragment shader: \n" <<  fragment_shader_source_code;
+
 	} catch (std::ifstream::failure error) {
 		// TODO use logging here
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: EITHER FRAG OR VERT SHADER HAS THE ERROR " << strerror(errno) <<  std::endl;

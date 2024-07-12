@@ -1,7 +1,7 @@
 #ifndef SHADER_PIPELINE_HPP
 #define SHADER_PIPELINE_HPP
 
-#include "glad/gl.h"
+#include "glad/glad.h"
 
 /*
  * A class that can construct an opengl shader program given

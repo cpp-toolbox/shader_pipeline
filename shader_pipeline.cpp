@@ -4,6 +4,9 @@
 #include <sstream>
 #include <iostream>
 #include <cstring>
+#include <spdlog/spdlog.h>
+
+#include "sbpt_generated_includes.hpp"
 
 /**
  * precondition to all methods:
@@ -11,8 +14,7 @@
  */
 
 /**
- * description
- *  given the shader's source code and type, register the shader with opengl
+ * \detils given the shader's source code and type, register the shader with opengl
  *  and return the id that opengl has given the shader
  */
 GLuint ShaderPipeline::create_and_compile_shader_object(const char *shader_source_code, GLenum shader_type) {
@@ -27,15 +29,14 @@ GLuint ShaderPipeline::create_and_compile_shader_object(const char *shader_sourc
 
     if (!success) {
         glGetShaderInfoLog(shader_object, 512, NULL, info_log);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
+        spdlog::get(Systems::graphics)->error("shader compilation failed: {}", info_log);
     }
 
     return shader_object;
 }
 
 /**
- * description:
- *  creates a shader program given a vertex and fragment shader, also uses the program
+ * \details creates a shader program given a vertex and fragment shader, also uses the program
  */
 void ShaderPipeline::create_and_link_and_use_shader_program(GLuint vertex_shader_id, GLuint fragment_shader_id) {
     this->shader_program_id = glCreateProgram();
@@ -49,7 +50,9 @@ void ShaderPipeline::create_and_link_and_use_shader_program(GLuint vertex_shader
 
     if (!success) {
         glGetProgramInfoLog(shader_program_id, 512, NULL, info_log);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
+        spdlog::get(Systems::graphics)->error("shader program linking failed {}", info_log);
+    } else {
+        spdlog::get(Systems::graphics)->info("shader program linking succeeded");
     }
 
     // this queues up the shaders for deletion
@@ -61,13 +64,13 @@ void ShaderPipeline::create_and_link_and_use_shader_program(GLuint vertex_shader
 }
 
 /**
- * description:
- *  given a valid path with respect to the build folder for a vertex and fragment shader
+ * \details given a valid path with respect to the build folder for a vertex and fragment shader
  *  it loads in the shaders and creates a shader program
  */
 void ShaderPipeline::load_in_shaders_from_file(const char *vertex_shader_path, const char *fragment_shader_path) {
 
-    std::cout << "loading: " << vertex_shader_path << ", " << fragment_shader_path << std::endl;
+    spdlog::get(Systems::graphics)
+        ->info("loading in vertex shader: {} and fragment shader: {}", vertex_shader_path, fragment_shader_path);
     // load in shaders from file
     std::string vertex_shader_source_code, fragment_shader_source_code;
     std::ifstream vertex_shader_file_stream, fragment_shader_file_stream;
@@ -87,13 +90,10 @@ void ShaderPipeline::load_in_shaders_from_file(const char *vertex_shader_path, c
 
         vertex_shader_source_code = vertex_shader_string_stream.str();
         fragment_shader_source_code = fragment_shader_string_stream.str();
-        std::cout << "Successfully loaded in the vertex shader: \n" << vertex_shader_source_code;
-        std::cout << "Successfully loaded in the fragment shader: \n" << fragment_shader_source_code;
 
     } catch (std::ifstream::failure error) {
-        // TODO use logging here
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: EITHER FRAG OR VERT SHADER HAS THE ERROR "
-                  << strerror(errno) << std::endl;
+        spdlog::get(Systems::graphics)
+            ->error("file not successfully read, either frag or vert shader has the error: {}", strerror(errno));
     }
 
     // compile the shaders
